@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ film.title }} - Applab Movie{% endblock title %}
+
+{% block head %}
+<meta name="description" content="{{ film.description|truncatewords:30 }}" />
+<meta name="keywords" content="{{ film.title }}, movie, {{ film.categories.all|join:", " }}" />
+<meta property="og:title" content="{{ film.title }}" />
+<meta property="og:description" content="{{ film.description|truncatewords:30 }}" />
+<meta property="og:image" content="{{ film.image_url }}" />
+<meta property="og:url" content="{{ request.build_absolute_uri }}" />
+<meta property="og:type" content="video.other" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="{{ film.title }}" />
+<meta name="twitter:description" content="{{ film.description|truncatewords:30 }}" />
+<meta name="twitter:image" content="{{ film.image_url }}" />
+{% endblock %}
+
+{% block content %}
+<div class="relative overflow-hidden bg-gray-900">
+  <div class="absolute inset-0 bg-black opacity-50 z-10"></div>
+  <article class="container mx-auto py-12 px-4 relative z-20">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div class="flex justify-center items-start">
+        <img src="{{ film.image_url }}" alt="{{ film.title }}" class="w-full h-auto max-w-sm rounded-lg shadow-lg border border-indigo-600">
+      </div>
+      <div class="flex flex-col justify-between">
+        <div>
+          <h1 class="text-5xl font-bold text-white mb-4">{{ film.title }}</h1>
+          <p class="text-gray-400 text-lg mb-6">Released on: {{ film.release_date }}</p>
+          <p class="text-gray-300 mb-4">{{ film.description }}</p>
+          <ul class="space-y-2 mb-6 text-gray-300">
+            <li><strong>Duration:</strong> {{ film.duration }} minutes</li>
+            <li><strong>Categories:</strong>
+              {% for category in film.categories.all %}
+                <span class="text-indigo-500">{{ category.name }}</span>{% if not forloop.last %}, {% endif %}
+              {% endfor %}
+            </li>
+          </ul>
+        </div>
+        {% if film.video_url %}
+        <div>
+          <div class="relative rounded-lg overflow-hidden shadow-md">
+            <video id="video-player" class="video-js vjs-default-skin w-full h-auto rounded-lg" controls preload="auto">
+              <source src="{{ film.video_url }}" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <a href="{{ film.video_url }}" download class="mt-4 inline-block px-6 py-3 bg-indigo-700 text-white rounded-lg shadow hover:bg-indigo-600 transition focus:ring-2 focus:ring-indigo-500">
+            <i class="fas fa-download"></i> Download Video
+          </a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- suggestions -->
+    <div class="mt-12">
+      <h2 class="text-3xl font-bold text-white mb-6">You Might Also Like</h2>
+      <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {% for suggested_film in suggest_films %}
+        <div class="rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+          <a href="{% url 'film:detail_movie' suggested_film.id %}">
+            <img src="{{ suggested_film.image_url }}" alt="{{ suggested_film.title }}" class="w-full h-auto object-cover transition-transform duration-300 transform hover:scale-105">
+            <div class="p-4 bg-gray-800">
+              <h3 class="text-lg font-semibold text-indigo-600">{{ suggested_film.title }}</h3>
+              <p class="text-gray-400 text-sm">Released: {{ suggested_film.release_date }}</p>
+            </div>
+          </a>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+  </article>
+</div>
+
+<link href="https://vjs.zencdn.net/7.21.0/video-js.css" rel="stylesheet">
+<script src="https://vjs.zencdn.net/7.21.0/video.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const player = videojs('video-player', {
+      fluid: true,
+      controls: true,
+      autoplay: false,
+      preload: 'auto',
+      playbackRates: [0.5, 1, 1.5, 2],
+    });
+  });
+</script>
+{% endblock content %}

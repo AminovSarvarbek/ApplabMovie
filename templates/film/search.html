@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Search Results - Applab Movie{% endblock title %}
+
+{% block head %}
+<!-- SEO Tags -->
+<meta name="description" content="Search results for '{{ search_text }}' on Applab Movie. Discover a variety of films matching your query." />
+<meta name="keywords" content="film, movies, search, {{ search_text }}" />
+<meta property="og:title" content="Search Results - Applab Movie" />
+<meta property="og:description" content="Explore films related to '{{ search_text }}' on Applab Movie." />
+<meta property="og:url" content="{{ request.build_absolute_uri }}" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Search Results - Applab Movie" />
+<meta name="twitter:description" content="Find movies related to '{{ search_text }}' on Applab Movie." />
+{% endblock %}
+
+{% block content %}
+<div class="container mx-auto py-12 px-6">
+  <h1 class="text-3xl font-bold text-white mb-6">Search Results for "{{ search_text }}"</h1>
+
+  {% if films %}
+    <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      {% for film in films %}
+        <div class="rounded-lg overflow-hidden shadow-md bg-gray-800 transition-shadow duration-300 hover:shadow-lg">
+          <a href="{% url 'film:detail_movie' film.id %}" class="block">
+            <img src="{{ film.image_url }}" alt="{{ film.title }}" class="w-full h-64 object-cover transition-transform duration-300 transform hover:scale-105">
+            <div class="p-4">
+              <h2 class="text-lg font-semibold text-indigo-500">{{ film.title }}</h2>
+              <p class="text-gray-400 text-sm mt-2">{{ film.description|truncatewords:20 }}</p>
+              <p class="text-gray-500 text-sm mt-2">Released: {{ film.release_date }}</p>
+            </div>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="text-gray-400 text-lg">No films found matching your search criteria. Please try again.</p>
+  {% endif %}
+
+  <div class="mt-8">
+    <a href="/" class="px-4 py-2 bg-indigo-600 text-white rounded-md shadow hover:bg-indigo-500 transition">Back to Home</a>
+  </div>
+</div>
+{% endblock content %}

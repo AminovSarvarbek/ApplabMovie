@@ -1,0 +1,108 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Applab Movie{% endblock title %}</title>
+  <link rel="icon" href="{% static 'images/logo.webp' %}" type="image/x-icon">
+  <link rel="shortcut icon" href="{% static 'images/logo.webp' %}" type="image/x-icon">
+  
+  {% block head %}
+
+  {% endblock head %}
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Explore the latest movies, genres, and popular films at Applab Movie. Discover your next favorite film today!">
+  <meta name="keywords" content="movies, film, genres, popular movies, Applab Movie">
+  <meta name="author" content="Applab Movie">
+  
+  <!-- Open Graph Meta Tags for Social Media -->
+  <meta property="og:title" content="Applab Movie">
+  <meta property="og:description" content="Explore the latest movies, genres, and popular films at Applab Movie. Discover your next favorite film today!">
+  <meta property="og:image" content="URL_TO_YOUR_IMAGE"> <!-- Add a URL to an image representing your website -->
+  <meta property="og:url" content="https://movie.applab.uz">
+  <meta property="og:type" content="website">
+
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:title" content="Applab Movie">
+  <meta name="twitter:description" content="Explore the latest movies, genres, and popular films at Applab Movie. Discover your next favorite film today!">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap">
+  
+  <style>
+    body {
+      font-family: 'Raleway', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-black text-white">
+  <!-- Navbar -->
+  <header class="bg-gray-900 shadow-lg sticky top-0 z-50">
+    <div class="container mx-auto flex items-center justify-between py-4 px-6">
+      <div class="text-3xl font-bold">
+        <a href="/" class="text-white">MOVIE</a>
+      </div>
+      <nav class="space-x-6 hidden md:flex">
+        <a href="#" class="hover:text-indigo-500">Home</a>
+        <a href="#genres" class="hover:text-indigo-500">Genres</a>
+        <a href="#movies" class="hover:text-indigo-500">Popular</a>
+      </nav>
+      <div class="flex space-x-4 items-center">
+        <form action="{% url 'film:search' %}" method="GET" class="relative w-64 hidden md:block">
+          <input name='search' type="text" placeholder="Search..." class="w-full py-2 px-4 rounded-md bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+          <button type="submit" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-500 transition duration-200">
+            Search
+          </button>
+        </form>
+        <button id="hamburger" class="md:hidden text-gray-400 hover:text-white focus:outline-none focus:ring">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Menu -->
+  <nav id="mobile-menu" class="md:hidden bg-gray-800 hidden">
+    <div class="flex flex-col items-center space-y-4 py-4">
+      <a href="#" class="text-white hover:text-indigo-500">Home</a>
+      <a href="#genres" class="text-white hover:text-indigo-500">Genres</a>
+      <a href="#movies" class="text-white hover:text-indigo-500">Popular</a>
+      <form action="{% url 'film:search' %}" method="GET" class="relative w-full px-4">
+        <input name='search' type="text" placeholder="Search..." class="w-full py-2 px-4 rounded-md border bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+        <button type="submit" class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-500 transition duration-200">
+          Search
+        </button>
+      </form>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="md:px-0">
+    {% block content %}
+    {% endblock content %}
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 py-6">
+    <div class="container mx-auto text-center text-gray-500">
+      © 2024 Applab Movie. All rights reserved.
+    </div>
+  </footer>
+
+  <!-- JavaScript for Hamburger Menu -->
+  <script>
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    hamburger.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+  </script>
+
+</body>
+</html>
