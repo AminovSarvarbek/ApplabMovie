@@ -103,6 +103,40 @@
       mobileMenu.classList.toggle('hidden');
     });
   </script>
+  <!-- Yandex.RTB -->
+<script>window.yaContextCb=window.yaContextCb||[]</script>
+<script src="https://yandex.ru/ads/system/context.js" async></script>
+
+  <!-- Yandex.RTB R-A-14376272-1 -->
+<script>
+window.addEventListener("load", () => {
+    const render = (imageId) => {
+        window.yaContextCb.push(() => {
+            Ya.Context.AdvManager.render({
+                "renderTo": imageId,
+                "blockId": "R-A-14376272-1",
+                "type": "inImage"
+            })
+        })
+    }
+    const renderInImage = (images) => {
+        if (!images.length) {
+            return
+        }
+        const image = images.shift()
+        image.id = `yandex_rtb_R-A-14376272-1-${Math.random().toString(16).slice(2)}`
+        if (image.tagName === "IMG" && !image.complete) {
+            image.addEventListener("load", () => {
+                render(image.id)
+            }, { once: true })
+        } else {
+            render(image.id)
+        }
+        renderInImage(images)
+    }
+    renderInImage(Array.from(document.querySelectorAll("img")))
+}, { once: true })
+</script>
 
 </body>
 </html>
